@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор ₽ ⇄ ₩</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="валюта.png">
+    <link rel="stylesheet" href="../style.css"> 
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            margin: 0;
+            display: flex;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #0077cc;
+        }
+
+        .calc-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 150px;
+        }
+
+        button {
+            padding: 5px 10px;
+            margin: 5px;
+            border: none;
+            background: #0077cc;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005fa3;
+        }
+
+        #chart {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="side-menu">
+        <ul>
+            <li><a href="../index.html" class="nav-link">Главная</a></li>
+            <li><a href="../info/info.html" class="nav-link">Информация о МКБ</a></li>
+            <li><a href="../news/news.html" class="nav-link">Новости</a></li>
+            <li><a href="../val/val.html" class="nav-link">Курс валют</a></li>
+            <li><a href="../contact/contact.html" class="nav-link">Контакты</a></li>
+            <li><a href="../video/video.html" class="nav-link">Видео</a></li>
+        </ul>
+    </nav>
+
+    <div class="content">
+
+        <h1>Калькулятор: ₽ ⇄ ₩</h1>
+        <p>Текущий курс: <span id="rate"></span></p>
+
+        <div class="calc-container">
+            <div>
+                <label>Рубли (₽): <input type="number" id="rub" placeholder="Введите ₽"></label>
+                <button onclick="toWon()">В воны</button>
+            </div>
+            <div>
+                <label>Воны (₩): <input type="number" id="won" placeholder="Введите ₩"></label>
+                <button onclick="toRub()">В рубли</button>
+            </div>
+            <p id="result"></p>
+        </div>
+
+        <canvas id="chart" width="600" height="300"></canvas>
+
+    </div>
+
+    <script>
+        let rate = null;
+
+        async function loadRate() {
+            const res = await fetch("https://www.cbr-xml-daily.ru/daily_json.js");
+            const data = await res.json();
+            rate = data.Valute.KRW.Value / data.Valute.KRW.Nominal;
+            document.getElementById("rate").textContent = rate.toFixed(4) + " ₽ за 1 ₩";
+        }
+
+        function valid(num) {
+            return num !== "" && !isNaN(num) && parseFloat(num) >= 0;
+        }
+
+        async function toWon() {
+            if (!rate) await loadRate();
+            const rub = document.getElementById("rub").value;
+            if (!valid(rub)) {
+                document.getElementById("result").textContent = "Введите корректную сумму в рублях.";
+                return;
+            }
+            const res = parseFloat(rub) / rate;
+            document.getElementById("result").textContent = `${rub} ₽ = ${res.toFixed(2)} ₩`;
+        }
+
+        async function toRub() {
+            if (!rate) await loadRate();
+            const won = document.getElementById("won").value;
+            if (!valid(won)) {
+                document.getElementById("result").textContent = "Введите корректную сумму в вонах.";
+                return;
+            }
+            const res = parseFloat(won) * rate;
+            document.getElementById("result").textContent = `${won} ₩ = ${res.toFixed(2)} ₽`;
+        }
+
+        async function loadChart() {
+            let labels = [];
+            let data = [];
+
+            for (let i = 30; i >= 0; i--) {
+                let date = new Date();
+                date.setDate(date.getDate() - i);
+                let dd = String(date.getDate()).padStart(2, '0');
+                let mm = String(date.getMonth() + 1).padStart(2, '0');
+                let yyyy = date.getFullYear();
+                let url = `https://www.cbr-xml-daily.ru/archive/${yyyy}/${mm}/${dd}/daily_json.js`;
+
+                try {
+                    const res = await fetch(url);
+                    if (res.ok) {
+                        const json = await res.json();
+                        let dayRate = json.Valute.KRW.Value / json.Valute.KRW.Nominal;
+                        labels.push(`${dd}.${mm}`);
+                        data.push(dayRate);
+                    }
+                } catch {
+                    console.log(`Нет данных за ${dd}.${mm}.${yyyy}`);
+                }
+            }
+
+            draw(labels, data);
+        }
+
+        function draw(labels, data) {
+            const ctx = document.getElementById('chart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '₩ к ₽',
+                        data: data,
+                        backgroundColor: 'rgba(0, 119, 204, 0.5)',
+                        hoverBackgroundColor: 'rgba(255, 105, 180, 0.7)', 
+                        borderColor: 'rgba(0, 119, 204, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    interaction: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    onHover: (event, elements) => {
+                        event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                    },
+                    onClick: (e, el) => {
+                        if (el.length > 0) {
+                            const i = el[0].index;
+                            alert(`Дата: ${labels[i]}\nКурс: ${data[i].toFixed(4)} ₽`);
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+
+
+        loadRate();
+        loadChart();
+    </script>
+
+</body>
+</html>
