@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о МКБ</title>
+    <link rel="icon" type="image/png" href="mkb.png">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            display: flex;
+            font-family: 'Segoe UI';
+            color: #000000;
+            background: #fff;
+            margin: 0; 
+            padding: 0;
+        }
+
+        img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center; 
+            position: relative;
+            color:#f8f8f8; 
+            padding-left: 30;
+        }
+
+        h2 {
+            font-weight: bold;
+            font-size: 28px;
+            margin-top: 48px;
+            margin-bottom: 32px;
+            padding-left: 60px;
+        }
+
+        .fact-block {
+            background: #f7f8fa;
+            border-radius: 16px;
+            padding: 28px 32px 20px 32px;
+            min-width: 230px;
+            min-height: 90px;
+            box-sizing: border-box;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .fact-block:hover {
+            box-shadow: 0 0 10px rgba(214, 25, 54, 0.5);
+        }
+
+        .fact-block span:first-child {
+            font-size: 22px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .fact-block span:last-child {
+            font-size: 15px;
+            color: #656c72;
+        }
+
+        a {
+            color: #d61936;
+            text-decoration: none;
+        }
+
+        .fact-block-large {
+            min-width: 310px;
+        }
+
+        .facts-container {
+             display: flex;
+             flex-wrap: wrap;
+             justify-content: center;
+             gap: 24px;
+        }
+        
+        .description {
+            font-family: Arial; 
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #000000;
+            text-align: justify;
+            padding: 20px; 
+            margin: 30px;
+        }
+        
+        .kart {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 24px;
+        }
+
+        .kart img {
+            width: 330px;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .kart img:hover {
+            transform: scale(1.25); 
+        }
+
+        .history {
+            font-size: 18px;
+            color: #333; 
+            line-height: 1.6; 
+            text-align: justify;
+            background-color: #f7f8fa;
+            border: 1.5px solid #e0e3e8;
+            border-radius: 16px;
+            padding: 28px 32px 20px 32px;  
+
+        }
+        .clients-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 24px;
+            padding: 20px;
+        }
+
+        .client-card {
+            width: 230px; 
+            height: 230px; 
+            border-radius: 50%; 
+            border: 2px solid #d61936;  
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            box-shadow: 0 0 0 rgba(214, 25, 54, 0); 
+            color: #d61936;
+        }
+
+        .client-card:hover {
+            transform: scale(1.05); 
+            box-shadow: 0 0 20px rgba(214, 25, 54, 0.5); 
+        }
+
+        .client-card h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .client-card p {
+            font-size: 13px;
+            color: #555; 
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px; 
+            right: 20px;
+            background-color: #d61936; 
+            color: white; 
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000; 
+        }
+
+        .hero-section {
+            background-color: #d61936; 
+            color: white; 
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+            margin-bottom: 20px;
+            margin: 0;
+            width: 100%;
+        }
+        .hero-left {
+            width: 50%; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; 
+        }
+
+        .hero-left img {
+            max-width: 200px; 
+            margin-bottom: 10px; 
+        }
+
+        .hero-right {
+            width: 50%; 
+            text-align: right;
+        }
+
+        .hero-right img {
+            max-width: 100%; 
+            height: auto;
+        }
+
+        .bank-structure-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; 
+            gap: 24px;
+            padding: 20px;
+        }
+
+        .bank-structure-image {
+            width: 600px;
+            height: auto;
+            margin-right: 24px;
+        }
+
+        .bank-structure-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .bank-services {
+            display: flex;
+            flex-direction: column; 
+            gap: 24px;
+        }
+
+        .bank-service-card {
+            width: 300px; 
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(214, 25, 54, 0.5);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bank-service-card:hover {
+            transform: scale(1.20); 
+            box-shadow: 0 0 10px rgba(214, 25, 54, 0.5); 
+        }
+
+        .bank-service-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .bank-service-card p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .info-block {
+            margin-top: 20px;
+            border-bottom: 1px solid #ccc; 
+            padding-bottom: 10px; 
+        }
+        .info-block h2 {
+            color: rgb(88, 86, 86);
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 48px;
+            margin-bottom: 10px;
+            padding-left: 60px; 
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="side-menu">
+        <ul>
+            <li><a href="../index.html" class="nav-link">Главная</a></li>
+            <li><a href="../info/info.html" class="nav-link active">Информация о МКБ</a></li>
+            <li><a href="../news/news.html" class="nav-link">Новости</a></li>
+            <li><a href="../val/val.html" class="nav-link">Курс валют</a></li>
+            <li><a href="../contact/contact.html" class="nav-link">Контакты</a></li>
+            <li><a href="../video/video.html" class="nav-link">Видео</a></li>
+        </ul>
+    </nav>
+    
+    <div class="content">
+        <main>
+            <div class="hero-section">
+                <div class="hero-left">
+                    <img src="лого.png" alt="Логотип">
+                    <h1>Московский кредитный банк</h1>
+                    <p>
+                        <b>Частный банк № 2 по размеру активов</b>
+                    </p>
+                    <p>
+                        <b>32 года развиваем клиентский сервис для людей и компаний</b>
+                    </p>
+                </div>
+                <div class="hero-right">
+                    <img src="main-banner.png" alt="Изображение МКБ">  
+                </div>
+            </div>
+            
+            <div class="info-block">
+                <h2>Общая информация</h2>
+            </div>
+                <div class="description">
+                    <b>Публичное акционерное общество «Московский кредитный банк»</b> — негосударственный публичный банк, 
+                    осуществляющий коммерческую деятельность в 22 регионах Центрального, Приволжского, 
+                    Северо-Западного и Уральского федеральных округов России. Включён Банком России в 
+                    перечень системно значимых кредитных организаций. Головной офис расположен в Москве.
+                </div>
+            
+            
+            <div class="kart">
+                <img src="офис.jpg" alt="Офис">
+                <img src="вход.jpg" alt="Вход">
+                <img src="надпись.webp" alt="Надпись">
+            </div>
+
+            <h2>
+                История
+            </h2>
+
+            <div class ="history">
+                АКБ "Московский кредитный банк" был основан в <u>1992</u> году по инициативе московского
+                предпринимателя <b>Бориса Борисова</b>. Первоначальными учредителями стали группа частных
+                предприятий и товарно-сырьевая биржа «Потенциал России». В 1994 году банк перешёл под контроль
+                структур <b>Романа Авдеева</b> и вошёл в число крупнейших банков России. В разные годы
+                руководство банком осуществляли <b>Валерий Кухтаров</b>, <b>Валерий Комаровский</b>,
+                <b>Андрей Донских</b>, <b>Александр Хрилев</b>, <b>Александр Николашин</b> и
+                <b>Владимир Чубарь</b>.
+
+                <p>
+                    С 2016 года МКБ активно расширял свою деятельность, приобретая другие банки и развивая инвестиционное 
+                    направление. В 2017 году банк был включён в список <i>системно значимых кредитных учреждений России</i>. В 
+                    последующие годы МКБ проводил сделки по продаже и покупке дочерних компаний и банков, запускал новые 
+                    кредитные платформы и проводил допэмиссии акций для привлечения инвестиций.
+                </p>
+            </div>
+
+            <h2>Структура банка</h2>
+            <div class="bank-structure-container">
+                <div class="bank-structure-image">
+                    <img src="калкьулятор.png" alt="Структура банка">  
+                </div>
+                <div class="bank-services">
+                    <div class="bank-service-card">
+                        <h3>Розничный банкинг</h3>
+                        <p>Кредиты, депозиты, банковские карты, онлайн-банкинг.</p>
+                    </div>
+                    <div class="bank-service-card">
+                        <h3>Корпоративный банкинг</h3>
+                        <p>Кредитование бизнеса, расчетно-кассовое обслуживание, инвестиционные услуги.</p>
+                    </div>
+                    <div class="bank-service-card">
+                        <h3>Инвестиционный банкинг</h3>
+                        <p>Торговля ценными бумагами, валютные операции, выпуск облигаций.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>
+                Факты и цифры об МКБ
+            </h2>
+
+            <div class="facts-container">
+                <div class="fact-block">
+                    <span>С 1992 года</span><br>
+                    <span>работаем на финансовом рынке</span>
+                </div>
+                <div class="fact-block">
+                    <span>4,9 трлн ₽</span><br>
+                    <span>активы по МСФО и РСБУ</span>
+                </div>
+                <div class="fact-block">
+                    <span>№5</span><br>
+                    <span>в рейтинге
+                        <a href="https://www.banki.ru/services/responses/?date=2023">Banki.ru</a>
+                        по качеству клиентского сервиса
+                    </span>
+                </div>
+                <div class="fact-block fact-block-large">
+                    <span>Системно значимый банк</span><br>
+                    <span>в соответствии со
+                        <a href="https://www.cbr.ru/banking_sector/credit/systembanks.html/">списком ЦБ РФ</a>
+                    </span>
+                </div>
+                <div class="fact-block fact-block-large">
+                    <span>Крупнейший публичный частный банк</span><br>
+                    <span>по размеру активов</span>
+                </div>
+            </div>
+            
+            <h2>
+                Категории клиентов
+            </h2>
+            
+            <div class="clients-container">
+                <div class="client-card">
+                    <h3>Крупнейшие и средние российские компании</h3>
+                    <p>на индивидуальных условиях</p>
+                </div>
+
+                <div class="client-card">
+                    <h3>Малый бизнес и предприниматели</h3>
+                    <p>специальные предложения для бизнеса</p>
+                </div>
+
+                <div class="client-card">
+                    <h3>Клиенты Private banking</h3>
+                    <p>комплексная экспертиза и инструменты для выбора оптимальных решений</p>
+                </div>
+
+                <div class="client-card">
+                    <h3>Физические лица</h3>
+                    <p>прозрачные условия продуктов и понятная коммуникация</p>
+                </div>
+            </div>
+            <a href="#" class="back-to-top">Наверх</a>
+        </main>
+    </div>
+</body>
+
+</html>
